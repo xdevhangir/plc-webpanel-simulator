@@ -20,6 +20,7 @@ namespace WebPanelTests
         [Test]
         public void Test_PLC_Verisi_Gonder()
         {
+            Thread.Sleep(3000); // 2 saniye bekle
             driver.Navigate().GoToUrl("http://localhost:5000");
 
             var input = driver.FindElement(By.Id("giris"));

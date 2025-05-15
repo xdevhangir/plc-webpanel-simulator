@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -14,6 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Python kurulum
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Flask
+        run: pip install flask
+
+      - name: Start Flask server
+        run: python WebPanelApp/app.py &
+        shell: bash
+
+      # .NET kurulumu
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -22,7 +34,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore WebPanelTest/WebPanelTest/WebPanelTest.csproj
 
-      - name: Build the test project
+      - name: Build test project
         run: dotnet build WebPanelTest/WebPanelTest/WebPanelTest.csproj --configuration Debug
 
       - name: Run tests
