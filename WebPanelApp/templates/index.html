@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PLC Web Panel</title>
+</head>
+<body>
+    <h1>Simulated PLC Panel</h1>
+    <p>Durum: <strong>{{ status }}</strong></p>
+
+    <form method="POST">
+        <label for="giris">Veri Gir:</label>
+        <input type="text" name="giris_verisi" id="giris">
+        <button type="submit">Gönder</button>
+    </form>
+
+    {% if veri %}
+        <p>Gönderilen Veri: <strong>{{ veri }}</strong></p>
+    {% endif %}
+</body>
+</html>
