@@ -20,10 +20,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore WebPanelTest/WebPanelTest.csproj
+        run: dotnet restore WebPanelTest/WebPanelTest/WebPanelTest.csproj
 
       - name: Build the test project
-        run: dotnet build WebPanelTest/WebPanelTest.csproj --configuration Debug
+        run: dotnet build WebPanelTest/WebPanelTest/WebPanelTest.csproj --configuration Debug
 
       - name: Run tests
-        run: dotnet test WebPanelTest/WebPanelTest.csproj --configuration Debug
+        run: dotnet test WebPanelTest/WebPanelTest/WebPanelTest.csproj --configuration Debug
