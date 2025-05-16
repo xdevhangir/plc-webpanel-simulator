@@ -21,7 +21,7 @@ namespace WebPanelTests
         public void Test_PLC_Verisi_Gonder()
         {
             Thread.Sleep(3000); // 2 saniye bekle
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            driver.Navigate().GoToUrl("http://host.docker.internal:5000");
 
             var input = driver.FindElement(By.Id("giris"));
             input.SendKeys("Deneme Verisi");
