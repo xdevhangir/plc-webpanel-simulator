@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Python kurulum
+      # Python kurulumu
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -24,11 +24,18 @@ jobs:
       - name: Start Flask server
         run: python WebPanelApp/app.py &
         shell: bash
-       
+
       - name: Wait for Flask server to start
-        run: sleep 10
+        run: |
+          for i in {1..10}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "Server is up!"
+              break
+            fi
+            echo "Waiting for Flask server..."
+            sleep 2
+          done
         shell: bash
-        
 
       # .NET kurulumu
       - name: Setup .NET
@@ -44,14 +51,14 @@ jobs:
 
       - name: Run tests and generate TRX log
         run: dotnet test WebPanelTest/WebPanelTest/WebPanelTest.csproj --logger "trx;LogFileName=test-results.trx"
-      
+
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
       - name: Generate HTML report
         run: reportgenerator -reports:**/test-results.trx -targetdir:TestResultsReport -reporttypes:Html
         env:
-          PATH: ${{ env.PATH }}:/home/runner/.dotnet/tools
+          PATH: ${{ env.PATH }};C:\Users\runneradmin\.dotnet\tools
 
       - name: Upload HTML report as artifact
         uses: actions/upload-artifact@v4
