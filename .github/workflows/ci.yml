@@ -6,24 +6,28 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest  # windows yerine linux runner gerekli docker için
-
-    services:
-      webpanel:
-        build:
-          context: .
-          dockerfile: Dockerfile
-        ports:
-          - 5000:5000
-        options: >-
-          --health-cmd="curl -f http://localhost:5000/ || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t webpanel-image -f Dockerfile .
+
+      - name: Run Docker container
+        run: docker run -d -p 5000:5000 --name webpanel-container webpanel-image
+
+      - name: Wait for container to be ready
+        run: |
+          for i in {1..10}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "Server is up!"
+              break
+            fi
+            echo "Waiting for web panel..."
+            sleep 2
+          done
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
