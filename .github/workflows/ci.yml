@@ -37,5 +37,19 @@ jobs:
       - name: Build test project
         run: dotnet build WebPanelTest/WebPanelTest/WebPanelTest.csproj --configuration Debug
 
-      - name: Run tests
-        run: dotnet test WebPanelTest/WebPanelTest/WebPanelTest.csproj --configuration Debug
+      - name: Run tests and generate TRX log
+        run: dotnet test WebPanelTest/WebPanelTest/WebPanelTest.csproj --logger "trx;LogFileName=test-results.trx"
+      
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Generate HTML report
+        run: reportgenerator -reports:**/test-results.trx -targetdir:TestResultsReport -reporttypes:Html
+        env:
+          PATH: ${{ env.PATH }}:/home/runner/.dotnet/tools
+
+      - name: Upload HTML report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: TestResultsReport
