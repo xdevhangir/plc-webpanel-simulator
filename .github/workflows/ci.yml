@@ -16,7 +16,7 @@ jobs:
         run: docker build -t webpanel-image -f Dockerfile .
 
       - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name webpanel-container webpanel-image
+        run: docker run -d --add-host=host.docker.internal:host-gateway -p 5000:5000 --name webpanel-container webpanel-image
 
       - name: Wait for container to be ready
         run: |
