@@ -12,12 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t webpanel-image -f Dockerfile .
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'  # veya senin Flask app'in hangi sürümle uyumluysa
 
-      - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name webpanel-container webpanel-image
+      - name: Install Flask dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r WebPanelApp/requirements.txt
 
+      - name: Start Flask App
+        run: |
+          nohup python3 WebPanelApp/app.py > flask.log 2>&1 &
+      
       - name: Wait for Flask app to be ready
         run: |
           echo "Checking if Flask app is ready..."
