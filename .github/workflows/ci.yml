@@ -49,7 +49,7 @@ jobs:
           PATH: ${{ env.PATH }}:/home/runner/.dotnet/tools
 
       - name: Upload HTML report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: test-report
           path: TestResultsReport
