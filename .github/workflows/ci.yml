@@ -24,6 +24,11 @@ jobs:
       - name: Start Flask server
         run: python WebPanelApp/app.py &
         shell: bash
+       
+      - name: Wait for Flask server to start
+        run: sleep 10
+        shell: bash
+        
 
       # .NET kurulumu
       - name: Setup .NET
